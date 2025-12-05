@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+    
+    parameters {
+        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Version to deploy')
+    }
+
+    environment {
+        NEXUS_URL = "http://nexus:8081"
+        NEXUS_CREDENTIALS_ID = "nexus_cred"
+        NEXUS_REPO = "maven-releases"
+
+        GROUP_ID_PATH = "org/example" 
+        ARTIFACT_ID = "allure"
+    }
+
+    stages {
+        
+        stage('Download from Nexus') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: NEXUS_CREDENTIALS_ID, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh """
+                        echo "Downloading version: ${params.VERSION}"
+                        
+                        # Формируем ссылку. Maven хранит файлы так: URL / REPO / GROUP / ARTIFACT / VERSION / FILE
+                        # Файл будет называться: allure-1.0.1.jar (например)
+                        
+                        curl -u $USER:$PASS -o app.jar ${NEXUS_URL}/repository/${NEXUS_REPO}/${GROUP_ID_PATH}/${ARTIFACT_ID}/${params.VERSION}/${ARTIFACT_ID}-${params.VERSION}.jar
+                        
+                        # Если файл скачался успешно, копируем его во временную папку для Ansible
+                        # (Проверка: -s проверяет, что файл не пустой)
+                        if [ -s app.jar ]; then
+                            cp app.jar /tmp/app.jar
+                            echo "Download successful"
+                        else
+                            echo "Download failed or file is empty"
+                            exit 1
+                        fi
+                    """
+                }
+            }
+        }    
+
+        stage('Git clone ansible'){
+            steps {
+                git branch: 'main', url: 'https://github.com/Aidaricus/jenkins-homework'
+            }
+        }
+        
+        stage('Run ansible'){
+            steps {
+                dir('ansible') {
+                    sh 'ansible-playbook -i inventory deploy.yml'
+                }
+            }
+        }
+    }
+}

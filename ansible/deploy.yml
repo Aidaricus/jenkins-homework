@@ -1,0 +1,15 @@
+---
+- name: Deploy Application
+  hosts: webservers
+  tasks:
+    - name: Copy jar file to destination
+      copy:
+        src: /tmp/app.jar
+        dest: /tmp/deployed-app.jar
+        mode: '0755'
+
+    - name: Run application
+      shell: |
+        nohup java -jar /tmp/deployed-app.jar > /tmp/app.log 2>&1 &
+      async: 10
+      poll: 0

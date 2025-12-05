@@ -1,0 +1,87 @@
+pipeline {
+    agent any
+    
+    tools {
+        jdk 'jdk17'      
+        maven 'maven3'   
+    }
+    
+    environment {
+        NEXUS_URL = "http://nexus:8081"
+        NEXUS_CREDENTIALS_ID = "nexus_cred"
+        NEXUS_REPO = "maven-releases" 
+        
+        ARTIFACT_ID = "allure"
+        GROUP_ID = "org.example"
+        VERSION = "1.0.${BUILD_NUMBER}"
+    }
+
+    stages {
+
+        stage('Environment Check') {
+            steps {
+                sh """
+                    echo "Java version:"
+                    java -version
+                    echo "Maven version:"
+                    mvn -version
+                    echo "Current directory:"
+                    pwd
+                """
+                }
+        }
+        
+        stage('git clone'){
+            steps{
+                git branch: 'main', url: 'https://github.com/Aidaricus/jenkins-homework'
+            }
+        }
+
+
+        stage('SonarQube Analysis') {
+           steps {
+               withSonarQubeEnv('SonarQube') {
+                   sh 'mvn clean package sonar:sonar'
+               }
+           }
+        }
+        
+       stage('Run test'){
+           steps {
+               sh 'mvn test'
+           }
+       }
+       
+       stage('Generate Allure report'){
+           steps{
+               allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
+           }
+       }
+       
+        stage('Deploy to Nexus') {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: 'nexus:8081', 
+                    groupId: GROUP_ID,
+                    version: VERSION,
+                    repository: NEXUS_REPO,
+                    credentialsId: NEXUS_CREDENTIALS_ID,
+                    artifacts: [
+                        [artifactId: ARTIFACT_ID,
+                         classifier: '',
+                         file: 'target/allure-1.0-SNAPSHOT.jar', 
+                         type: 'jar']
+                    ]
+                )
+            }
+        }
+    
+        stage('Run Job'){
+            steps{
+               build job: 'Deploy-Job', parameters: [string(name: 'VERSION', value: VERSION)]
+           }
+        }
+    }
+}
