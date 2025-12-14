@@ -1,0 +1,416 @@
+Started by user Amankulov Aidar
+Obtained Jenkinsfile_Build from git https://github.com/Aidaricus/jenkins-homework
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /Users/aidaramankulov/.jenkins/workspace/Build-Job
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /Users/aidaramankulov/.jenkins/workspace/Build-Job/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Aidaricus/jenkins-homework # timeout=10
+Fetching upstream changes from https://github.com/Aidaricus/jenkins-homework
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5 (Apple Git-154)'
+ > git fetch --tags --force --progress -- https://github.com/Aidaricus/jenkins-homework +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 1e1369953a498ed628a94c210252f2d141317cb4 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1e1369953a498ed628a94c210252f2d141317cb4 # timeout=10
+Commit message: "Fix ansible path"
+ > git rev-list --no-walk c09c20f4be579330655f0f6c9bfc6c33eae78640 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Tool Install)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Environment Check)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ echo 'Java version:'
+Java version:
++ java -version
+openjdk version "17.0.17" 2025-10-21
+OpenJDK Runtime Environment Homebrew (build 17.0.17+0)
+OpenJDK 64-Bit Server VM Homebrew (build 17.0.17+0, mixed mode, sharing)
++ echo 'Maven version:'
+Maven version:
++ mvn -version
+Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)
+Maven home: /Users/aidaramankulov/.jenkins/tools/hudson.tasks.Maven_MavenInstallation/maven3
+Java version: 17.0.17, vendor: Homebrew, runtime: /opt/homebrew/Cellar/openjdk@17/17.0.17/libexec/openjdk.jdk/Contents/Home
+Default locale: ru_RU, platform encoding: UTF-8
+OS name: "mac os x", version: "15.6", arch: "aarch64", family: "mac"
++ echo 'Current directory:'
+Current directory:
++ pwd
+/Users/aidaramankulov/.jenkins/workspace/Build-Job
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (git clone)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] git
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /Users/aidaramankulov/.jenkins/workspace/Build-Job/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Aidaricus/jenkins-homework # timeout=10
+Fetching upstream changes from https://github.com/Aidaricus/jenkins-homework
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5 (Apple Git-154)'
+ > git fetch --tags --force --progress -- https://github.com/Aidaricus/jenkins-homework +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 1e1369953a498ed628a94c210252f2d141317cb4 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1e1369953a498ed628a94c210252f2d141317cb4 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main 1e1369953a498ed628a94c210252f2d141317cb4 # timeout=10
+Commit message: "Fix ansible path"
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (SonarQube Analysis)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: SonarQube
+[Pipeline] {
+[Pipeline] sh
++ mvn clean package sonar:sonar
+[INFO] Scanning for projects...
+[WARNING] The artifact org.codehaus.mojo:sonar-maven-plugin:jar:4.0.0.4121 has been relocated to org.sonarsource.scanner.maven:sonar-maven-plugin:jar:4.0.0.4121: SonarQube plugin was moved to SonarSource organisation
+[INFO] 
+[INFO] -------------------------< org.example:allure >-------------------------
+[INFO] Building allure 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ allure ---
+[INFO] Deleting /Users/aidaramankulov/.jenkins/workspace/Build-Job/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ allure ---
+[INFO] skip non existing resourceDirectory /Users/aidaramankulov/.jenkins/workspace/Build-Job/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ allure ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ allure ---
+[INFO] skip non existing resourceDirectory /Users/aidaramankulov/.jenkins/workspace/Build-Job/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ allure ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug release 17] to target/test-classes
+[INFO] 
+[INFO] --- surefire:2.12.4:test (default-test) @ allure ---
+[WARNING]  Parameter 'systemProperties' is deprecated: Use systemPropertyVariables instead.
+[INFO] Surefire report directory: /Users/aidaramankulov/.jenkins/workspace/Build-Job/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Running mainClassTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.055 sec
+
+Results :
+
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ allure ---
+[INFO] Building jar: /Users/aidaramankulov/.jenkins/workspace/Build-Job/target/allure-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -------------------------< org.example:allure >-------------------------
+[INFO] Building allure 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- sonar:4.0.0.4121:sonar (default-cli) @ allure ---
+[WARNING] 23:23:06.996 Using an unspecified version instead of an explicit plugin version may introduce breaking analysis changes at an unwanted time. It is highly recommended to use an explicit version, e.g. 'org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121'.
+[INFO] 23:23:07.001 Java 17.0.17 Homebrew (64-bit)
+[INFO] 23:23:07.001 Mac OS X 15.6 (aarch64)
+[INFO] 23:23:07.054 User cache: /Users/aidaramankulov/.sonar/cache
+[INFO] 23:23:07.092 Communicating with SonarQube Server 25.11.0.114957
+[WARNING] Direct modification of testCompileSourceRoots through iterator.remove() is deprecated and will not work in Maven 4.0.0. Please use the add/remove methods instead. If you're using a plugin that causes this warning, please upgrade to the latest version and report an issue if the warning persists. To disable these warnings, set -Dmaven.project.sourceRoots.warningsDisabled=true on the command line, in the .mvn/maven.config file, or in project POM properties.
+[INFO] 23:23:07.095 Default locale: "ru_RU", source code encoding: "UTF-8"
+[WARNING] 23:23:07.209 Property 'env.SONARQUBE_SCANNER_PARAMS' is encrypted. The encryption of scanner properties is deprecated and will soon be removed.
+[INFO] 23:23:07.475 Load global settings
+[INFO] 23:23:07.537 Load global settings (done) | time=61ms
+[INFO] 23:23:07.542 Server id: 147B411E-AZsJsheZ-LnXDemg-TNN
+[INFO] 23:23:07.546 Loading required plugins
+[INFO] 23:23:07.546 Load plugins index
+[INFO] 23:23:07.603 Load plugins index (done) | time=56ms
+[INFO] 23:23:07.603 Load/download plugins
+[INFO] 23:23:07.614 Load/download plugins (done) | time=10ms
+[INFO] 23:23:07.740 Process project properties
+[INFO] 23:23:07.747 Process project properties (done) | time=7ms
+[INFO] 23:23:07.752 Project key: org.example:allure
+[INFO] 23:23:07.752 Base dir: /Users/aidaramankulov/.jenkins/workspace/Build-Job
+[INFO] 23:23:07.752 Working dir: /Users/aidaramankulov/.jenkins/workspace/Build-Job/target/sonar
+[INFO] 23:23:07.755 Load project settings for component key: 'org.example:allure'
+[INFO] 23:23:07.769 Load project settings for component key: 'org.example:allure' (done) | time=14ms
+[INFO] 23:23:07.778 Load quality profiles
+[INFO] 23:23:07.818 Load quality profiles (done) | time=40ms
+[INFO] 23:23:07.824 Auto-configuring with CI 'Jenkins'
+[INFO] 23:23:07.832 Load active rules
+[INFO] 23:23:08.030 Load active rules (done) | time=198ms
+[INFO] 23:23:08.032 Load analysis cache
+[INFO] 23:23:08.040 Load analysis cache (176 bytes) | time=8ms
+[INFO] 23:23:08.064 Preprocessing files...
+[INFO] 23:23:09.226 2 languages detected in 3 preprocessed files (done) | time=1162ms
+[INFO] 23:23:09.226 0 files ignored because of scm ignore settings
+[INFO] 23:23:09.227 Loading plugins for detected languages
+[INFO] 23:23:09.227 Load/download plugins
+[INFO] 23:23:09.233 Load/download plugins (done) | time=6ms
+[INFO] 23:23:09.276 Load project repositories
+[INFO] 23:23:09.323 Load project repositories (done) | time=47ms
+[INFO] 23:23:09.327 Indexing files...
+[INFO] 23:23:09.327 Project configuration:
+[INFO] 23:23:09.330 3 files indexed (done) | time=3ms
+[INFO] 23:23:09.330 Quality profile for java: Sonar way
+[INFO] 23:23:09.330 Quality profile for xml: Sonar way
+[INFO] 23:23:09.330 ------------- Run sensors on module allure
+[INFO] 23:23:09.352 Load metrics repository
+[INFO] 23:23:09.370 Load metrics repository (done) | time=18ms
+[INFO] 23:23:09.733 Sensor JavaSensor [java]
+[INFO] 23:23:09.735 Configured Java source version (sonar.java.source): 17, preview features enabled (sonar.java.enablePreview): false
+[INFO] 23:23:09.741 Server-side caching is enabled. The Java analyzer will not try to leverage data from a previous analysis.
+[INFO] 23:23:09.742 Using ECJ batch to parse 1 Main java source files with batch size 241 KB.
+[INFO] 23:23:09.844 Starting batch processing.
+[INFO] 23:23:10.033 The Java analyzer cannot skip unchanged files in this context. A full analysis is performed for all files.
+[INFO] 23:23:10.173 100% analyzed
+[INFO] 23:23:10.173 Batch processing: Done.
+[INFO] 23:23:10.174 Did not optimize analysis for any files, performed a full analysis for all 1 files.
+[INFO] 23:23:10.175 Using ECJ batch to parse 1 Test java source files with batch size 241 KB.
+[INFO] 23:23:10.175 Starting batch processing.
+[INFO] 23:23:10.196 100% analyzed
+[INFO] 23:23:10.196 Batch processing: Done.
+[INFO] 23:23:10.196 Did not optimize analysis for any files, performed a full analysis for all 1 files.
+[INFO] 23:23:10.196 No "Generated" source files to scan.
+[INFO] 23:23:10.197 Sensor JavaSensor [java] (done) | time=464ms
+[INFO] 23:23:10.197 Sensor SurefireSensor [java]
+[INFO] 23:23:10.198 parsing [/Users/aidaramankulov/.jenkins/workspace/Build-Job/target/surefire-reports]
+[INFO] 23:23:10.222 Sensor SurefireSensor [java] (done) | time=25ms
+[INFO] 23:23:10.222 Sensor XML Sensor [xml]
+[INFO] 23:23:10.224 1 source file to be analyzed
+[INFO] 23:23:10.297 1/1 source file has been analyzed
+[INFO] 23:23:10.297 Sensor XML Sensor [xml] (done) | time=75ms
+[INFO] 23:23:10.297 Sensor JaCoCo XML Report Importer [jacoco]
+[INFO] 23:23:10.297 'sonar.coverage.jacoco.xmlReportPaths' is not defined. Using default locations: target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml
+[INFO] 23:23:10.297 No report imported, no coverage information will be imported by JaCoCo XML Report Importer
+[INFO] 23:23:10.297 Sensor JaCoCo XML Report Importer [jacoco] (done) | time=0ms
+[INFO] 23:23:10.298 Sensor IaC Docker Sensor [iac]
+[INFO] 23:23:10.298 There are no files to be analyzed for the Docker language
+[INFO] 23:23:10.298 Sensor IaC Docker Sensor [iac] (done) | time=0ms
+[INFO] 23:23:10.298 Sensor IaC hadolint report Sensor [iac]
+[INFO] 23:23:10.299 Sensor IaC hadolint report Sensor [iac] (done) | time=1ms
+[INFO] 23:23:10.299 Sensor Java Config Sensor [iac]
+[INFO] 23:23:10.301 There are no files to be analyzed for the Java language
+[INFO] 23:23:10.301 Sensor Java Config Sensor [iac] (done) | time=2ms
+[INFO] 23:23:10.301 Sensor TextAndSecretsSensor [text]
+[INFO] 23:23:10.306 Available processors: 12
+[INFO] 23:23:10.306 Using 12 threads for analysis.
+[INFO] 23:23:10.468 Start fetching files for the text and secrets analysis
+[INFO] 23:23:10.483 Using Git CLI to retrieve untracked files
+[INFO] 23:23:10.499 Retrieving language associated files and files included via "sonar.text.inclusions" that are tracked by git
+[INFO] 23:23:10.499 Starting the text and secrets analysis
+[INFO] 23:23:10.500 3 source files to be analyzed for the text and secrets analysis
+[INFO] 23:23:10.503 3/3 source files have been analyzed for the text and secrets analysis
+[INFO] 23:23:10.504 Sensor TextAndSecretsSensor [text] (done) | time=203ms
+[INFO] 23:23:10.505 ------------- Run sensors on project
+[INFO] 23:23:10.560 Sensor JavaProjectSensor [java]
+[INFO] 23:23:10.561 Sensor JavaProjectSensor [java] (done) | time=1ms
+[INFO] 23:23:10.561 Sensor Zero Coverage Sensor
+[INFO] 23:23:10.563 Sensor Zero Coverage Sensor (done) | time=2ms
+[INFO] 23:23:10.563 Sensor Java CPD Block Indexer
+[INFO] 23:23:10.567 Sensor Java CPD Block Indexer (done) | time=4ms
+[INFO] 23:23:10.567 ------------- Gather SCA dependencies on project
+[INFO] 23:23:10.568 Dependency analysis skipped
+[INFO] 23:23:10.571 CPD Executor Calculating CPD for 1 file
+[INFO] 23:23:10.574 CPD Executor CPD calculation finished (done) | time=3ms
+[INFO] 23:23:10.576 SCM revision ID '1e1369953a498ed628a94c210252f2d141317cb4'
+[INFO] 23:23:10.612 Analysis report generated in 34ms, dir size=269.8 kB
+[INFO] 23:23:10.624 Analysis report compressed in 11ms, zip size=33.2 kB
+[INFO] 23:23:10.663 Analysis report uploaded in 39ms
+[INFO] 23:23:10.664 ANALYSIS SUCCESSFUL, you can find the results at: http://localhost:9000/dashboard?id=org.example%3Aallure
+[INFO] 23:23:10.664 Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+[INFO] 23:23:10.664 More about the report processing at http://localhost:9000/api/ce/task?id=aa7aa315-b123-4159-a02b-e8a93aa1872a
+[INFO] 23:23:10.670 Analysis total time: 3.040 s
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.659 s
+[INFO] Finished at: 2025-12-10T23:23:10+03:00
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Run test)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ mvn test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< org.example:allure >-------------------------
+[INFO] Building allure 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ allure ---
+[INFO] skip non existing resourceDirectory /Users/aidaramankulov/.jenkins/workspace/Build-Job/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ allure ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ allure ---
+[INFO] skip non existing resourceDirectory /Users/aidaramankulov/.jenkins/workspace/Build-Job/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ allure ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:2.12.4:test (default-test) @ allure ---
+[WARNING]  Parameter 'systemProperties' is deprecated: Use systemPropertyVariables instead.
+[INFO] Surefire report directory: /Users/aidaramankulov/.jenkins/workspace/Build-Job/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Running mainClassTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 sec
+
+Results :
+
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.718 s
+[INFO] Finished at: 2025-12-10T23:23:12+03:00
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Generate Allure report)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] allure
+[Build-Job] $ /Users/aidaramankulov/.jenkins/tools/ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation/allure/bin/allure generate /Users/aidaramankulov/.jenkins/workspace/Build-Job/target/allure-results -c -o /Users/aidaramankulov/.jenkins/workspace/Build-Job/allure-report
+Report successfully generated to /Users/aidaramankulov/.jenkins/workspace/Build-Job/allure-report
+Allure report was successfully generated.
+Archiving Allure report via ArtifactManager…
+Allure artifact archived via ArtifactManager.
+Allure report copied to: /Users/aidaramankulov/.jenkins/jobs/Build-Job/builds/7/allure-report
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to Nexus)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] nexusArtifactUploader
+Uploading artifact allure-1.0-SNAPSHOT.jar started....
+GroupId: org.example
+ArtifactId: allure
+Classifier: 
+Type: jar
+Version: 1.0.7
+File: allure-1.0-SNAPSHOT.jar
+Repository:maven-releases
+Uploading: http://localhost:8081/repository/maven-releases/org/example/allure/1.0.7/allure-1.0.7.jar
+100 % completed (2.3 kB / 2.3 kB).
+Uploaded: http://localhost:8081/repository/maven-releases/org/example/allure/1.0.7/allure-1.0.7.jar (2.3 kB at 21 kB/s)
+Uploading artifact allure-1.0-SNAPSHOT.jar completed.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Run Job)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] build
+Scheduling project: Deploy-Job
+Starting building: Deploy-Job #5
+Build Deploy-Job #5 completed: SUCCESS
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

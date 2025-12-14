@@ -1,0 +1,114 @@
+Started by upstream project "Build-Job" build number 7
+originally caused by:
+ Started by user Amankulov Aidar
+Obtained Jenkinsfile_Deploy from git https://github.com/Aidaricus/jenkins-homework
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /Users/aidaramankulov/.jenkins/workspace/Deploy-Job
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /Users/aidaramankulov/.jenkins/workspace/Deploy-Job/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Aidaricus/jenkins-homework # timeout=10
+Fetching upstream changes from https://github.com/Aidaricus/jenkins-homework
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5 (Apple Git-154)'
+ > git fetch --tags --force --progress -- https://github.com/Aidaricus/jenkins-homework +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 1e1369953a498ed628a94c210252f2d141317cb4 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1e1369953a498ed628a94c210252f2d141317cb4 # timeout=10
+Commit message: "Fix ansible path"
+ > git rev-list --no-walk 1e1369953a498ed628a94c210252f2d141317cb4 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Download from Nexus)
+[Pipeline] withCredentials
+Masking supported pattern matches of $PASS
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [PASS]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ echo 'Downloading version: 1.0.7'
+Downloading version: 1.0.7
++ curl -u admin:**** -o app.jar http://localhost:8081/repository/maven-releases/org/example/allure/1.0.7/allure-1.0.7.jar
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  2332  100  2332    0     0  50238      0 --:--:-- --:--:-- --:--:-- 50695
++ '[' -s app.jar ']'
++ cp app.jar /tmp/app.jar
++ echo 'Download successful'
+Download successful
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Git clone ansible)
+[Pipeline] git
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /Users/aidaramankulov/.jenkins/workspace/Deploy-Job/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Aidaricus/jenkins-homework # timeout=10
+Fetching upstream changes from https://github.com/Aidaricus/jenkins-homework
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5 (Apple Git-154)'
+ > git fetch --tags --force --progress -- https://github.com/Aidaricus/jenkins-homework +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 1e1369953a498ed628a94c210252f2d141317cb4 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1e1369953a498ed628a94c210252f2d141317cb4 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main 1e1369953a498ed628a94c210252f2d141317cb4 # timeout=10
+Commit message: "Fix ansible path"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Run ansible)
+[Pipeline] dir
+Running in /Users/aidaramankulov/.jenkins/workspace/Deploy-Job/ansible
+[Pipeline] {
+[Pipeline] sh
++ /opt/homebrew/bin/ansible-playbook -i inventory deploy.yml
+
+PLAY [Deploy Application] ******************************************************
+
+TASK [Gathering Facts] *********************************************************
+[WARNING]: Host 'localhost' is using the discovered Python interpreter at '/usr/bin/python3', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.20/reference_appendices/interpreter_discovery.html for more information.
+ok: [localhost]
+
+TASK [Copy jar file to destination] ********************************************
+changed: [localhost]
+
+TASK [Run application] *********************************************************
+changed: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
